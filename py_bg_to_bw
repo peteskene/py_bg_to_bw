@@ -1,0 +1,35 @@
+import pybedtools 
+from pybedtools import BedTool
+from pybedtools.contrib.bigwig import bedgraph_to_bigwig
+
+
+def py_bg_to_bw(list_files, chr_sizes, bedgraph_file_extension='bg'):
+    """
+    #written by peteskene@gmail.com
+    #provide list of bedgraph files; e.g. list_files = ['A.bg', 'B.bg']; can include path
+    
+    #default bedgraph file extension 'bg'
+    
+    #output file names automatically generated (which will contain path if included); e.g. 'A.bw', 'B.bw'
+    
+    #provide chr_sizes as a string of the species; e.g 'mm9' 'hg19' 'dm6'
+    """
+    
+    for item in list_files:
+        if bedgraph_file_extension not in item:
+            return 'Exiting... check bedgraph file exension is in each of the input filenames'
+    
+    #make bigwig filenames
+    bw_files = [f.replace(bedgraph_file_extension, 'bw') for f in list_files]
+
+    #make bw files
+    for i in range(len(list_files)):
+        print 'operating on: ' + list_files[i]
+        
+        bedgraph_to_bigwig(BedTool(list_files[i]), chr_sizes, bw_files[i])
+
+        print 'made bw file: ' + bw_files[i]
+        
+    print
+    
+    return 'Done'
